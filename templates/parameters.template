@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Example parameters
+
+Parameters:
+  stage:
+    Default: sbx
+    Type: String
+    Description: Stage Name
+    AllowedValues:
+      - dev
+      - qa
+      - prd
+      - sbx
+
+  projectName:
+    Default: /aws-deployer/projectName
+    Type: AWS::SSM::Parameter::Value<String>
+    Description: Project Name SSM Parameter
+
+Conditions:
+  isPrdAcc: !Equals [!Ref AWS::AccountId, "871238486811"]
+
+Resources:
+  testParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Description: Test Parameter
+      Name: !Sub /${projectName}/${stage}/test
+      Type: String
+      Value: "Test value"
+      Tier: Standard
